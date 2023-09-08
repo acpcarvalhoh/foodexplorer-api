@@ -44,6 +44,25 @@ class DishesController{
     async update(request, response){
 
     };
+
+    async show(request, response){
+        const { id } = request.params;
+
+        const dish = await knex("dishes").where({ id }).first();
+        const ingredients = await knex("ingredients").where({ dish_id: id }).orderBy("name");
+        const categories = await knex("categories").where({ dish_id: id }).orderBy("name");
+
+        return response.json({...dish, ingredients, categories});
+    };
+
+    async delete(request, response){
+        const { id } = request.params;
+
+        const dish = await knex("dishes").where({ id }).delete();
+
+        return response.json({message: "Prato deletado com sucesso"});
+    };
+
 };
 
 
