@@ -37,11 +37,10 @@ class DishesController{
 
         await knex("categories").insert(categoriesInsert);
         
-                
         response.status(200).json({ message: "Prato cadastrado com sucesso" })
 
-       
     };
+
 
     async update(request, response){
         const { name, image, description, ingredients, categories, price } = request.body;
@@ -71,27 +70,21 @@ class DishesController{
             throw new AppError("Não é permitido ter ingrediente com nome duplicado no mesmo prato!", 400);
         }
 
+
         dish.name = name ?? dish.name;
         dish.description = description ?? dish.description;
         dish.image = image ?? dish.image;
         dish.price = price ?? dish.price;
 
-        try{
-           
-            await knex("dishes").where({id: dish_id}).update(dish);
-            await updateCategoriesAndIngredients("ingredients", ingredients, dish_id)
-            await updateCategoriesAndIngredients("categories", categories, dish_id)
+          
+        await knex("dishes").where({id: dish_id}).update(dish);
+        await updateCategoriesAndIngredients("ingredients", ingredients, dish_id);
+        await updateCategoriesAndIngredients("categories", categories, dish_id); 
 
-            return response.status(200).json({})
-
-
-        }catch(error){
-            console.log(error)
-        }
-       
-
+        return response.status(200).json({message: "Prato atualizado"});
 
     };
+
 
     async show(request, response){
         const { id } = request.params;
@@ -103,12 +96,19 @@ class DishesController{
         return response.json({...dish, ingredients, categories});
     };
 
+
     async delete(request, response){
         const { id } = request.params;
 
         await knex("dishes").where({ id }).delete();
 
         return response.json({message: "Prato deletado com sucesso"});
+    };
+
+    async index(request, response){
+        const { categories, ingredients } = request.params;
+
+        
     };
 
 };
