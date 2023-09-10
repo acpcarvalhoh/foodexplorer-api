@@ -1,5 +1,6 @@
 const AppError = require("../utils/AppError");
 const knex = require("../database/knex");
+const updateCategoriesAndIngredients = require("../utils/dbUtils")
 
 class DishesController{
     async create(request, response){
@@ -35,6 +36,7 @@ class DishesController{
         });
 
         await knex("categories").insert(categoriesInsert);
+        
                 
         response.status(200).json({ message: "Prato cadastrado com sucesso" })
 
@@ -42,6 +44,52 @@ class DishesController{
     };
 
     async update(request, response){
+        const { name, image, description, ingredients, categories, price } = request.body;
+        const { dish_id } = request.params;
+
+        const dish = await knex("dishes").where({ id: dish_id }).first();
+       
+        if(!dish){
+            throw new AppError("Prato não encontrado!!");    
+        };
+
+        if (name !== dish.name) {
+            const dishWithUpdatedName = await knex("dishes").where({ name }).first();
+            
+            if (dishWithUpdatedName) {
+                throw new AppError("Já existe um prato com este nome!", 409);
+            };
+        };
+
+        const uniqueCategory = [...new Set(categories)]
+        if(uniqueCategory.length !== categories.length){
+            throw new AppError("Não é permitido ter categoria duplicada no mesmo prato!", 400);
+        }
+
+        const uniqueIngredient = [...new Set(ingredients)]
+        if(uniqueIngredient.length !== ingredients.length){
+            throw new AppError("Não é permitido ter ingrediente com nome duplicado no mesmo prato!", 400);
+        }
+
+        dish.name = name ?? dish.name;
+        dish.description = description ?? dish.description;
+        dish.image = image ?? dish.image;
+        dish.price = price ?? dish.price;
+
+        try{
+           
+            await knex("dishes").where({id: dish_id}).update(dish);
+            await updateCategoriesAndIngredients("ingredients", ingredients, dish_id)
+            await updateCategoriesAndIngredients("categories", categories, dish_id)
+
+            return response.status(200).json({})
+
+
+        }catch(error){
+            console.log(error)
+        }
+       
+
 
     };
 
@@ -58,7 +106,7 @@ class DishesController{
     async delete(request, response){
         const { id } = request.params;
 
-        const dish = await knex("dishes").where({ id }).delete();
+        await knex("dishes").where({ id }).delete();
 
         return response.json({message: "Prato deletado com sucesso"});
     };
