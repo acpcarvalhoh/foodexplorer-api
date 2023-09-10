@@ -106,8 +106,44 @@ class DishesController{
     };
 
     async index(request, response){
-        const { categories, ingredients } = request.params;
+        const { name, ingredients, categories } = request.query;
 
+        let dishes;
+
+        if(ingredients){
+            const filterIngredients = ingredients.split(',').map(ingredient => ingredient.trim());
+
+            dishes = await knex("ingredients")
+            .select([
+                "dishes.id",
+                "dishes.name",
+                "dishes.description",
+                "dishes.price"
+                               
+            ])
+            .whereLike("dishes.name", `%${name}%`)
+            .whereIn("ingredients.name", filterIngredients)
+            .innerJoin("dishes", "dishes.id", "ingredients.dish_id")
+            .orderBy("dishes.name");
+            
+
+        }else{
+            dishes = await knex("dishes")
+            .whereLike("name", `%${name}%`)
+            .orderBy("name");
+        };
+
+        const dishIngredients = await knex("ingredients");
+        const dishWithIngredients = dishes.map(dish => {
+            const dishIngredient = dishIngredients.filter(ingredient => ingredient.dish_id === dish.id);
+
+            return{
+                ...dish,
+                ingredients: dishIngredient
+            };
+        });
+
+        return response.json(dishWithIngredients);
         
     };
 
