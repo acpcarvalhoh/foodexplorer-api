@@ -9,8 +9,8 @@ const uploads = multer(uploadsConfig.MULTER);
 const dishesRoutes = Router();
 
 dishesRoutes.post("/", uploads.single("image"), dishesController.create);
+dishesRoutes.put("/:dish_id", uploads.single("image"), dishesController.update);
 dishesRoutes.get("/", dishesController.index);
-dishesRoutes.put("/:dish_id", dishesController.update);
 dishesRoutes.get("/:id", dishesController.show);
 dishesRoutes.delete("/:id", dishesController.delete);
 

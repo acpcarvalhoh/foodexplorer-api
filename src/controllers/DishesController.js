@@ -8,11 +8,14 @@ class DishesController{
     async create(request, response){
         const admin_id = 1;
         const { name, description, ingredients, categories, price } = request.body;
-        const dishImage = request.file.filename;
-
+        const fileName = request.file.filename;
+     
+        const categoriesArray = JSON.parse(categories);
+        const ingredientsArray = JSON.parse(ingredients);
+    
         const diskstorage = new Diskstorage();
-        const fileName = diskstorage.save(dishImage);
-
+        const dishImage = await diskstorage.save(fileName);
+        
         const checkDishExist = await knex("dishes").where({ name }).first();
         if(checkDishExist){
             throw new AppError("Você já cadastrou um prato com esse nome", 409);
@@ -20,13 +23,13 @@ class DishesController{
 
         const [dish_id] = await knex("dishes").insert({
             name,
-            image: fileName,
+            image: dishImage,
             description, 
             price, 
             admin_id
         });
 
-        const ingredientsInsert = ingredients.map(name => {
+        const ingredientsInsert = ingredientsArray.map(name => {
             return {
                 dish_id,
                 name,
@@ -35,7 +38,7 @@ class DishesController{
 
         await knex("ingredients").insert(ingredientsInsert);
 
-        const categoriesInsert = categories.map(name => {
+        const categoriesInsert = categoriesArray.map(name => {
             return {
                 dish_id,
                 name,
@@ -50,15 +53,25 @@ class DishesController{
 
 
     async update(request, response){
-        const { name, image, description, ingredients, categories, price } = request.body;
+        const { name, description, ingredients, categories, price } = request.body;
         const { dish_id } = request.params;
+        const fileName = request.file.filename;
 
+        const categoriesArray = JSON.parse(categories);
+        const ingredientsArray = JSON.parse(ingredients);
+    
+        const diskstorage = new Diskstorage();
         const dish = await knex("dishes").where({ id: dish_id }).first();
        
         if(!dish){
-            throw new AppError("Prato não encontrado!!");    
+            throw new AppError("Prato não encontrado!!", 404);    
         };
 
+        if(dish.image){
+            await diskstorage.delete(dish.image);
+
+        };  
+   
         if (name !== dish.name) {
             const dishWithUpdatedName = await knex("dishes").where({ name }).first();
             
@@ -67,27 +80,30 @@ class DishesController{
             };
         };
 
-        const uniqueCategory = [...new Set(categories)]
-        if(uniqueCategory.length !== categories.length){
+        
+        const uniqueCategory = [...new Set(categoriesArray)]
+        if(uniqueCategory.length !== categoriesArray.length){
             throw new AppError("Não é permitido ter categoria duplicada no mesmo prato!", 400);
-        }
+        };
 
-        const uniqueIngredient = [...new Set(ingredients)]
-        if(uniqueIngredient.length !== ingredients.length){
+        const uniqueIngredient = [...new Set(ingredientsArray)]
+        if(uniqueIngredient.length !== ingredientsArray.length){
             throw new AppError("Não é permitido ter ingrediente com nome duplicado no mesmo prato!", 400);
-        }
-
+        };
+       
+        const dishImage =  await diskstorage.save(fileName);
 
         dish.name = name ?? dish.name;
         dish.description = description ?? dish.description;
-        dish.image = image ?? dish.image;
+        dish.image = dishImage;
         dish.price = price ?? dish.price;
 
-          
-        await knex("dishes").where({id: dish_id}).update(dish);
-        await updateCategoriesAndIngredients("ingredients", ingredients, dish_id);
-        await updateCategoriesAndIngredients("categories", categories, dish_id); 
+                 
+        await knex("dishes").update(dish).where({id: dish_id});
 
+        await updateCategoriesAndIngredients("ingredients", ingredientsArray, dish_id);
+        await updateCategoriesAndIngredients("categories", categoriesArray, dish_id);
+            
         return response.status(200).json({message: "Prato atualizado"});
 
     };

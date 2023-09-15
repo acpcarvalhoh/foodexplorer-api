@@ -20,12 +20,13 @@ class Diskstorage{
         const fileToDelete = path.resolve(uploadsconfig.UPLOADS_FOLDER, file);
             
         try{
-            fs.promises.stat(fileToDelete);
-
+            await fs.promises.stat(fileToDelete);
 
         }catch{
-            return
-        }
+            return;
+
+        };
+
 
         await fs.promises.unlink(fileToDelete);
         
@@ -35,8 +36,5 @@ class Diskstorage{
 
 
 };
-
-
-
 
 module.exports = Diskstorage;
