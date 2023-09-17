@@ -30,7 +30,6 @@ class DishesController{
         });
 
         
-
         const ingredientsInsert = ingredientsArray.map(name => {
             return {
                 dish_id,
