@@ -29,6 +29,8 @@ class DishesController{
             admin_id
         });
 
+        
+
         const ingredientsInsert = ingredientsArray.map(name => {
             return {
                 dish_id,
@@ -123,6 +125,10 @@ class DishesController{
     async delete(request, response){
         const { id } = request.params;
 
+        const diskstorage = new Diskstorage();
+        const dish = await knex("dishes").where({ id }).first();
+
+        await diskstorage.delete(dish.image);
         await knex("dishes").where({ id }).delete();
 
         return response.json({message: "Prato deletado com sucesso"});
