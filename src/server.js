@@ -10,7 +10,7 @@ const app = express();
 app.use(express.json());
 database();
 
-app.use("/files", express.static(uploadsconfig.UPLOADS_FOLDER))
+app.use("/files", express.static(uploadsconfig.UPLOADS_FOLDER));
 app.use(routes);
 
 app.use((error, request, response, next) => {
