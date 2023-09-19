@@ -6,10 +6,10 @@ const Diskstorage = require("../providers/Diskstorage");
 
 class DishesController{
     async create(request, response){
-        const admin_id = 1;
+        const admin_id = request.user.id;
         const { name, description, ingredients, categories, price } = request.body;
         const fileName = request.file.filename;
-     
+
         const categoriesArray = JSON.parse(categories);
         const ingredientsArray = JSON.parse(ingredients);
     
@@ -134,14 +134,14 @@ class DishesController{
     };
 
     async index(request, response){
-        const { name, ingredients, categories } = request.query;
+        const { name, ingredients } = request.query;
+
+        console.log(ingredients)
 
         let dishes;
 
-        if(ingredients || categories){
+        if(ingredients){
             const filterIngredients = ingredients.split(',').map(ingredient => ingredient.trim());
-
-            const filterCategories = categories.split(',').map(category => category.trim());
 
             dishes = await knex("ingredients")
             .select([
@@ -149,26 +149,13 @@ class DishesController{
                 "dishes.name",
                 "dishes.description",
                 "dishes.price"
-                               
+
             ])
             .whereLike("dishes.name", `%${name}%`)
             .whereIn("ingredients.name", filterIngredients)
             .innerJoin("dishes", "dishes.id", "ingredients.dish_id")
             .orderBy("dishes.name");
 
-            dishes = await knex("categories")
-            .select([
-                "dishes.id",
-                "dishes.name",
-                "dishes.description",
-                "dishes.price"
-                               
-            ])
-            .whereLike("dishes.name", `%${name}%`)
-            .whereIn("categories.name", filterCategories)
-            .innerJoin("dishes", "dishes.id", "categories.dish_id")
-            .orderBy("dishes.name");
-            
 
         }else{
             dishes = await knex("dishes")
@@ -177,21 +164,16 @@ class DishesController{
         };
 
         const dishIngredients = await knex("ingredients");
-        const dishCategories = await knex("categories");
-        const dishWithIngredientsAndCategories = dishes.map(dish => {
+        const dishWithIngredients = dishes.map(dish => {
             const dishIngredient = dishIngredients.filter(ingredient => ingredient.dish_id === dish.id);
-
-            const dishCategory = dishCategories.filter(category => category.dish_id === dish.id);
-
 
             return{
                 ...dish,
-                ingredients: dishIngredient,
-                categories: dishCategory
+                ingredients: dishIngredient
             };
         });
 
-        return response.json(dishWithIngredientsAndCategories);
+        return response.json(dishWithIngredients);
         
     };
 
