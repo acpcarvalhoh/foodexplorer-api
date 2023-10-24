@@ -4,6 +4,7 @@ const express = require("express");
 const AppError = require("./utils/AppError");
 const database = require("./database/sqlite")
 const uploadsconfig = require("./configs/dishUloads")
+const  cors = require("cors")
 
 const routes = require("./routes")
 
@@ -12,7 +13,9 @@ app.use(express.json());
 database();
 
 app.use("/files", express.static(uploadsconfig.UPLOADS_FOLDER));
+app.use(cors());
 app.use(routes);
+
 
 app.use((error, request, response, next) => {
     if(error instanceof AppError){
@@ -20,7 +23,6 @@ app.use((error, request, response, next) => {
             status: "error",
             message: error.message
         });
-
 
     };
 

@@ -10,8 +10,13 @@ class DishesController{
         const { name, description, ingredients, categories, price } = request.body;
         const fileName = request.file.filename;
 
-        const categoriesArray = JSON.parse(categories);
-        const ingredientsArray = JSON.parse(ingredients);
+        console.log(request.body);
+
+        const ingredientsArray = ingredients.split(',');
+
+        console.log(ingredientsArray);
+
+        
     
         const diskstorage = new Diskstorage();
         const dishImage = await diskstorage.save(fileName);
@@ -39,14 +44,7 @@ class DishesController{
 
         await knex("ingredients").insert(ingredientsInsert);
 
-        const categoriesInsert = categoriesArray.map(name => {
-            return {
-                dish_id,
-                name,
-            };
-        });
-
-        await knex("categories").insert(categoriesInsert);
+        await knex("categories").insert({ dish_id, name: categories });
         
         response.status(200).json({ message: "Prato cadastrado com sucesso" })
 
@@ -164,12 +162,16 @@ class DishesController{
         };
 
         const dishIngredients = await knex("ingredients");
+        const dishCategories = await knex("categories");
         const dishWithIngredients = dishes.map(dish => {
             const dishIngredient = dishIngredients.filter(ingredient => ingredient.dish_id === dish.id);
-
+            const dishCategory = dishCategories.filter(category => category.dish_id === dish.id)
+            .map(name => name.name).join(", ");
+            
             return{
                 ...dish,
-                ingredients: dishIngredient
+                ingredients: dishIngredient,
+                category: dishCategory
             };
         });
 

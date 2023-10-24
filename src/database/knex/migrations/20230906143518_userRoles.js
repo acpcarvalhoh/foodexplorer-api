@@ -5,11 +5,10 @@ exports.up = function(knex) {
         table.string('email').notNullable().unique();
         table.string('password').notNullable();
         table.string('avatar', 255); 
-        table.enu('role', ['user', 'admin']).notNullable();
+        table.enu('role', ['user', 'admin'], { useNative: true, enumName: "roles"})
+        .notNullable().default("user");
 
         table.timestamps(true, true);
-
-
     }); 
 };
 
