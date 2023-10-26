@@ -56,8 +56,11 @@ class DishesController{
         const { dish_id } = request.params;
         const fileName = request.file.filename;
 
-        const categoriesArray = JSON.parse(categories);
-        const ingredientsArray = JSON.parse(ingredients);
+        console.log(fileName);
+        console.log(request.body);
+
+        const categoriesArray = categories.split(',');
+        const ingredientsArray = ingredients.split(',');
     
         const diskstorage = new Diskstorage();
         const dish = await knex("dishes").where({ id: dish_id }).first();
@@ -101,9 +104,9 @@ class DishesController{
         await knex("dishes").update(dish).where({id: dish_id});
 
         await updateCategoriesAndIngredients("ingredients", ingredientsArray, dish_id);
-        await updateCategoriesAndIngredients("categories", categoriesArray, dish_id);
+        await updateCategoriesAndIngredients("categories", categoriesArray, dish_id); 
             
-        return response.status(200).json({message: "Prato atualizado"});
+        return response.status(200).json({ message: "Prato atualizado" });
 
     };
 
