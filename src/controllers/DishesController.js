@@ -54,12 +54,20 @@ class DishesController{
     async update(request, response){
         const { name, description, ingredients, categories, price } = request.body;
         const { dish_id } = request.params;
-        const fileName = request.file.filename;
+        let fileName;
 
+        if(request.file){
+            fileName = request.file.filename;
+            
+        }
+    
+
+        
+       
+        console.log(request.body); 
         console.log(fileName);
-        console.log(request.body);
 
-        const categoriesArray = categories.split(',');
+       /*  const categoriesArray = categories.split(',');
         const ingredientsArray = ingredients.split(',');
     
         const diskstorage = new Diskstorage();
@@ -69,7 +77,7 @@ class DishesController{
             throw new AppError("Prato não encontrado!!", 404);    
         };
 
-        if(dish.image){
+        if(fileName && dish.image){
             await diskstorage.delete(dish.image);
 
         };  
@@ -104,7 +112,7 @@ class DishesController{
         await knex("dishes").update(dish).where({id: dish_id});
 
         await updateCategoriesAndIngredients("ingredients", ingredientsArray, dish_id);
-        await updateCategoriesAndIngredients("categories", categoriesArray, dish_id); 
+        await updateCategoriesAndIngredients("categories", categoriesArray, dish_id); */
             
         return response.status(200).json({ message: "Prato atualizado" });
 
