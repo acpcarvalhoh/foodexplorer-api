@@ -10,14 +10,8 @@ class DishesController{
         const { name, description, ingredients, categories, price } = request.body;
         const fileName = request.file.filename;
 
-        console.log(request.body);
-
         const ingredientsArray = ingredients.split(',');
 
-        console.log(ingredientsArray);
-
-        
-    
         const diskstorage = new Diskstorage();
         const dishImage = await diskstorage.save(fileName);
         
@@ -58,16 +52,9 @@ class DishesController{
 
         if(request.file){
             fileName = request.file.filename;
-            
-        }
-    
-
-        
-       
-        console.log(request.body); 
-        console.log(fileName);
-
-       /*  const categoriesArray = categories.split(',');
+        };
+      
+        const categoriesArray = categories.split(',');
         const ingredientsArray = ingredients.split(',');
     
         const diskstorage = new Diskstorage();
@@ -77,7 +64,7 @@ class DishesController{
             throw new AppError("Prato não encontrado!!", 404);    
         };
 
-        if(fileName && dish.image){
+        if(fileName !== undefined && dish.image){
             await diskstorage.delete(dish.image);
 
         };  
@@ -100,19 +87,19 @@ class DishesController{
         if(uniqueIngredient.length !== ingredientsArray.length){
             throw new AppError("Não é permitido ter ingrediente com nome duplicado no mesmo prato!", 400);
         };
-       
-        const dishImage =  await diskstorage.save(fileName);
 
+        if(fileName !== undefined){
+            const dishImage =  await diskstorage.save(fileName);
+            dish.image = dishImage;
+        }; 
+             
         dish.name = name ?? dish.name;
         dish.description = description ?? dish.description;
-        dish.image = dishImage;
         dish.price = price ?? dish.price;
-
-                 
+       
         await knex("dishes").update(dish).where({id: dish_id});
-
         await updateCategoriesAndIngredients("ingredients", ingredientsArray, dish_id);
-        await updateCategoriesAndIngredients("categories", categoriesArray, dish_id); */
+        await updateCategoriesAndIngredients("categories", categoriesArray, dish_id);
             
         return response.status(200).json({ message: "Prato atualizado" });
 
