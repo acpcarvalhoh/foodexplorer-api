@@ -132,8 +132,6 @@ class DishesController{
     async index(request, response){
         const { name, ingredients } = request.query;
 
-        console.log(ingredients)
-
         let dishes;
 
         if(ingredients){
