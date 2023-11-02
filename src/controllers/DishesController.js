@@ -130,36 +130,41 @@ class DishesController{
     };
 
     async index(request, response){
-        const { name, ingredients } = request.query;
+        const { search } = request.query;
 
-        let dishes;
+        const dishesByName = await knex("dishes")
+        .select([
+            "dishes.id",
+            "dishes.name",
+            "dishes.image",
+            "dishes.description",
+            "dishes.price"
+        ])
+        .where("dishes.name", "like", `%${search}%`)
+        .orderBy("dishes.name");
 
-        if(ingredients){
-            const filterIngredients = ingredients.split(',').map(ingredient => ingredient.trim());
+        const ingredients = await knex("ingredients")
+        .select("ingredients.dish_id")
+        .where("ingredients.name", "like", `%${search}%`);
 
-            dishes = await knex("ingredients")
-            .select([
-                "dishes.id",
-                "dishes.name",
-                "dishes.description",
-                "dishes.price"
+        const  ingredientsId = ingredients.map(ingredient => ingredient.dish_id);
 
-            ])
-            .whereLike("dishes.name", `%${name}%`)
-            .whereIn("ingredients.name", filterIngredients)
-            .innerJoin("dishes", "dishes.id", "ingredients.dish_id")
-            .orderBy("dishes.name");
-
-
-        }else{
-            dishes = await knex("dishes")
-            .whereLike("name", `%${name}%`)
-            .orderBy("name");
-        };
-
+        const dishesByIngredients = await knex("dishes")
+        .select([
+            "dishes.id",
+            "dishes.name",
+            "dishes.image",
+            "dishes.description",
+            "dishes.price"
+        ])
+        .whereIn("dishes.id", ingredientsId)
+        .orderBy("dishes.name");
+        
+        const combinedDishes = [...dishesByName, ...dishesByIngredients];
+          
         const dishIngredients = await knex("ingredients");
         const dishCategories = await knex("categories");
-        const dishWithIngredients = dishes.map(dish => {
+        const dishWithIngredients = combinedDishes.map(dish => {
             const dishIngredient = dishIngredients.filter(ingredient => ingredient.dish_id === dish.id);
             const dishCategory = dishCategories.filter(category => category.dish_id === dish.id)
             .map(name => name.name).join(", ");
@@ -169,7 +174,7 @@ class DishesController{
                 ingredients: dishIngredient,
                 category: dishCategory
             };
-        });
+        }); 
 
         return response.json(dishWithIngredients);
         
