@@ -6,35 +6,29 @@ const { sign } = require("jsonwebtoken");
 
 class SessionsController{
     async create(request, response){
+     
+        const { email, password } = request.body;
+        const user = await knex("userRoles").where({ email }).first();
 
-      /*   try { */
-                const { email, password } = request.body;
-            const user = await knex("userRoles").where({ email }).first();
-
-            if(!user){
-                throw new AppError("Usuário não encontrado", 401);
-            };
+        if(!user){
+            throw new AppError("Usuário não encontrado", 401);
+        };
 
 
-            const isMatchPassword = await compare(password, user.password);
+        const isMatchPassword = await compare(password, user.password);
 
-            if(!isMatchPassword){
-                throw new AppError("Email e/ou senha inconrretos", 401);
-            }; 
+        if(!isMatchPassword){
+            throw new AppError("Email e/ou senha inconrretos", 401);
+        }; 
 
-            const { secret, expiresIn } = authConfig.jwt;
-            const token = sign({ role: user.role }, secret, {
-                subject: String(user.id),
-                expiresIn,
-            });
+        const { secret, expiresIn } = authConfig.jwt;
+        const token = sign({ role: user.role }, secret, {
+            subject: String(user.id),
+            expiresIn,
+        });
 
-            return response.json({user, token});
-           
-        /* } catch (error) {
-            console.log(error);
-        } */
-
-       
+        return response.json({ user, token });
+              
         
     };
 };

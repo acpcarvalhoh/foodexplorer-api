@@ -161,7 +161,8 @@ class DishesController{
         .orderBy("dishes.name");
         
         const combinedDishes = [...dishesByName, ...dishesByIngredients];
-          
+
+               
         const dishIngredients = await knex("ingredients");
         const dishCategories = await knex("categories");
         const dishWithIngredients = combinedDishes.map(dish => {
