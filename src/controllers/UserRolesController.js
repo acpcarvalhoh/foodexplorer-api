@@ -8,7 +8,7 @@ class UserRolesController{
 
         const checkUserExist = await knex("userRoles").where({ email }).first();
         if(checkUserExist){
-            throw new AppError("Usuário já existe no bando dados", 409);
+            throw new AppError("Email já existe no bando dados", 409);
         };
 
         const hashPassword = await hash(password, 8);

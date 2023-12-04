@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require("path");
-const uploadsconfig = require("../configs/dishUloads");
+const uploadsconfig = require("../configs/dishUploads");
 
 class Diskstorage{
     async save(file){

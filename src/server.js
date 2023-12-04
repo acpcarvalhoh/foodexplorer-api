@@ -3,17 +3,22 @@ require("dotenv");
 const express = require("express");
 const AppError = require("./utils/AppError");
 const database = require("./database/sqlite")
-const uploadsconfig = require("./configs/dishUloads")
+const uploadsconfig = require("./configs/dishUploads")
+const cookieParser = require("cookie-parser")
 const  cors = require("cors")
 
 const routes = require("./routes")
 
 const app = express();
 app.use(express.json());
+app.use(cookieParser());
 database();
 
 app.use("/files", express.static(uploadsconfig.UPLOADS_FOLDER));
-app.use(cors());
+app.use(cors({
+    origin: ["http://localhost:5173", "http://127.0.0.1:5173/"],
+    credentials: true,
+}));
 app.use(routes);
 
 
