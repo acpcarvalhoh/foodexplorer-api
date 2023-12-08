@@ -9,6 +9,6 @@ const ensureAuthenticated = require("../middlewares/ensureAuthenticated");
 const userRouter = Router();
 
 userRouter.post("/", userRolesController.create);
-userRouter.get("/validated", ensureAuthenticated, sessionsValidateController.create);
+userRouter.get("/validated", ensureAuthenticated, sessionsValidateController.index);
 
 module.exports = userRouter;

@@ -159,8 +159,19 @@ class DishesController{
         ])
         .whereIn("dishes.id", ingredientsId)
         .orderBy("dishes.name");
+
+        const uniqueDishIds = new Set([...dishesByName.map((dish) => dish.id), ...dishesByIngredients.map((dish) => dish.id)]);
         
-        const combinedDishes = [...dishesByName, ...dishesByIngredients];
+        const combinedDishes = await knex("dishes")
+        .select([
+            "dishes.id",
+            "dishes.name",
+            "dishes.image",
+            "dishes.description",
+            "dishes.price",
+        ])
+        .whereIn("dishes.id", Array.from(uniqueDishIds))
+        .orderBy("dishes.name");
 
                
         const dishIngredients = await knex("ingredients");
