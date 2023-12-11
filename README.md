@@ -25,17 +25,17 @@ A API possui os seguintes endpoints:
 
 - **POST /users**: Cria um novo usuário na base de dados. Requer os campos "name", "email" e "password" no corpo da requisição.
 
-- **PUT /users/:id**: Atualiza os dados de um usuário existente. Requer o campo "id" como um parâmetro de rota e os campos "name", "email" e "password" no corpo da requisição.
+### Pratos
 
-### Notas sobre os  Filmes
+- **POST /dishes**: Cria um  novo prato. Requer os campos  "name", "description", "ingredients", "categories", "price",  no corpo da requisição. O campo "image" deve ser enviado do via FormData.
 
-- **GET /notes?user_id=:user_id&title=:title&tags=:tags**: Lista todas as notas de filmes de um usuário. Aceita os parâmetros opcionais "user_id" para filtrar as notas por usuário, "title" para buscar notas por título e "tags" para buscar notas por tags. Caso o parâmetro "tags" seja fornecido, a API irá filtrar as notas que possuem as tags especificadas.
+- **PUT /dishes/:dish_id**: Atualiza dos dados de um prato existente. Requer o campo "dish_id" como um parâmetro de rota.
 
-- **GET /notes/:id**: Retorna informações detalhadas sobre uma nota de filme específica. Requer o campo "id" como um parâmetro de rota.
+- GET **/dishes?search=**: Lista todos os pratos cadastrados. Aceita os parâmetros opcionais "search" e o nome do prato ou ingrediente que deseja buscar. Caso o parâmetro "search" seja fornecido, a API irá filtrar os pratos correspondentes aos ingredientes e vise versa.
 
-- **POST /notes/:user_id**: Cria uma nova nota de filme para um usuário específico. Requer o campo "user_id" como um parâmetro de rota e os campos "title", "description", "rating" e "tags" no corpo da requisição.
+- GET **/dishes/id**: Retorna informações detalhadas sobre um prato específico. Requer o campo "id" como um parâmetro de rota..
 
-- **DELETE /notes/:id**: Exclui uma nota de filme específica. Requer o campo "id" como um parâmetro de rota.
+- **DELETE /notes/:id**: Exclui um prato específico. Requer o campo "id" como um parâmetro de rota.
 
 ### Tags
 
