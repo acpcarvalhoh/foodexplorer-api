@@ -2,7 +2,7 @@
 ![Estrutura do bando de dados](src/assets/drawnsql.png)
 
 
-Esta é uma API permite cadastrar usuários no banco de dados, esse usuário podem cadastrar notas de filmes, adicionar tags aos filmes e listar as informações relacionadas a eles. A API foi construída usando Node.js e utiliza o framework Express.js para lidar com as rotas e requisições HTTP. O banco de dados utilizado é o SQLite, e o Knex.js é utilizado como um query builder para interagir com o banco de dados.
+Esta é uma API gerenciamento de restaurantes  desenvolvida para proporcionar uma plataforma versátil que permite aos usuários, especialmente restaurantes e estabelecimentos de gastronomia, administrar o catálogo de pratos oferecidos, o usuário poderá vizualizar pratos, pesquisar por pratos ou ingredientes, salvar pratos favoritos, acompanhar histórico de pedidos, já o admin  poderá criar, visualizar, editar e apagar um prato a qualquer momento. A API foi construída usando Node.js e utiliza o framework Express.js para lidar com as rotas e requisições HTTP. O banco de dados utilizado é o SQLite, e o Knex.js é utilizado como um query builder para interagir com o banco de dados.
 
 
 ## Tecnologias Utilizadas
@@ -14,6 +14,7 @@ As principais tecnologias utilizadas no desenvolvimento desta API são:
 - SQLite: banco de dados relacional utilizado para armazenar as informações da API.
 - Knex.js: query builder utilizado para interagir com o banco de dados SQLite.
 - bcryptjs: biblioteca para a criptografia de senhas.
+- cors: Cross-Origin Resource Sharing, um mecanismo para permitir acesso controlado a recursos de um servidor de um domínio diferente na web.
 
 
 ## Endpoints
