@@ -60,7 +60,7 @@ A API possui os seguintes endpoints:
 A API utiliza o banco de dados SQLite para armazenar as informações. As migrações do banco de dados estão configuradas para criar as tabelas necessárias automaticamente. As tabelas criadas são:
 
 - Tabela "userRoles": Armazena informações dos usuários, como nome, e-mail, senha e role, seja ela "admin" ou "user".
-- Tabela "dishes": Armazena dados dos pratos do restaurante, incluindo nome, descrição, endereço da imagem, preço o ID do admin.
+- Tabela "dishes": Armazena dados dos pratos do restaurante, incluindo nome, descrição, endereço da imagem, preço e o ID do admin.
 - Tabela "categories": Armazena as categorias dos pratos, com nome da categoria, e o ID do prato correspondente.
 - Tabela "ingredients": Armazena os ingredientes dos pratos, com nome do ingrediente, e o ID do prato correspondente.
 
