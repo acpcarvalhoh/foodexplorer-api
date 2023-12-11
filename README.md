@@ -31,7 +31,7 @@ A API possui os seguintes endpoints:
 
 - **PUT /dishes/:dish_id**: Atualiza dos dados de um prato existente. Requer o campo "dish_id" como um parâmetro de rota.
 
-- **GET /dishes?search=**: Lista todos os pratos cadastrados. Aceita os parâmetros opcionais "search" e o nome do prato ou ingrediente que deseja buscar. Caso o parâmetro "search" seja fornecido, a API irá filtrar os pratos correspondentes aos ingredientes e vise versa.
+- **GET /dishes?search=**: Lista todos os pratos cadastrados. Aceita os parâmetros opcionais "search" e o nome do prato ou ingrediente que deseja buscar. Caso o parâmetro "search" seja fornecido, a API irá filtrar os pratos correspondentes aos ingredientes e virse versa.
 
 - **GET /dishes/id**: Retorna informações detalhadas sobre um prato específico. Requer o campo "id" como um parâmetro de rota..
 
@@ -43,7 +43,7 @@ A API possui os seguintes endpoints:
 
 - **GET /favorites**: Lista todos os pratos favoritos relacionados a um usuário específico. Requer o campo "user_id" que é inserido no cabeçalho das requisições.
  
-- **DELETE /favorites/:id**: Remove o prato específico da tabela de favoritos. Requer o campo "id" do praro específo como parametro.
+- **DELETE /favorites/:id**: Remove o prato específico da tabela de favoritos. Requer o campo "id" do praro específo como parâmetro.
 
 ## Configuração do Projeto
 
