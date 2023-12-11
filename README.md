@@ -25,6 +25,8 @@ A API possui os seguintes endpoints:
 
 - **POST /users**: Cria um novo usuário na base de dados. Requer os campos "name", "email" e "password" no corpo da requisição.
 
+- **POST /sessions**: Responsável por logar o usuário na aplicação gerando um token para o mesmo usar futuramente nas suas requisições. Requer os campos "email" e "password" no corpo da requisição.
+
 ### Pratos
 
 - **POST /dishes**: Cria um  novo prato. Requer os campos  "name", "description", "ingredients", "categories", "price",  no corpo da requisição. O campo "image" deve ser enviado do via FormData.
@@ -57,9 +59,10 @@ A API possui os seguintes endpoints:
 
 A API utiliza o banco de dados SQLite para armazenar as informações. As migrações do banco de dados estão configuradas para criar as tabelas necessárias automaticamente. As tabelas criadas são:
 
-- Tabela "users": Armazena informações dos usuários, como nome, e-mail e senha.
-- Tabela "movie_notes": Armazena as notas de filmes, incluindo título, descrição, classificação e o ID do usuário relacionado.
-- Tabela "movie_tags": Armazena as tags relacionadas a cada nota de filme, com o ID da nota e o ID do usuário correspondente.
+- Tabela "userRoles": Armazena informações dos usuários, como nome, e-mail, senha e role, seja ela "admin" ou "user".
+- Tabela "dishes": Armazena dados dos pratos do restaurante, incluindo nome, descrição, endereço da imagem, preço o ID do admin.
+- Tabela "categories": Armazena as categorias dos pratos, com nome da categoria, e o ID do prato correspondente.
+- Tabela "ingredients": Armazena os ingredientes dos pratos, com nome do ingrediente, e o ID do prato correspondente.
 
 ## Contribuição
 
