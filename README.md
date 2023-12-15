@@ -1,5 +1,5 @@
 # FOODEXPLORER-API
-![Estrutura do bando de dados](src/assets/drawnsql.png)
+![Estrutura do bando de dados](src/assets/draw-table.png)
 
 
 Esta é uma API gerenciamento de restaurantes  desenvolvida para proporcionar uma plataforma versátil que permite aos usuários, especialmente restaurantes e estabelecimentos de gastronomia, administrar o catálogo de pratos oferecidos, o usuário poderá vizualizar pratos, pesquisar por pratos ou ingredientes, salvar pratos favoritos, acompanhar histórico de pedidos, já o admin  poderá criar, visualizar, editar e apagar um prato a qualquer momento. A API foi construída usando Node.js e utiliza o framework Express.js para lidar com as rotas e requisições HTTP. O banco de dados utilizado é o SQLite, e o Knex.js é utilizado como um query builder para interagir com o banco de dados.
@@ -52,8 +52,16 @@ A API possui os seguintes endpoints:
 1. Clone este repositório em sua máquina local.
 2. Certifique-se de ter o Node.js e o NPM (Node Package Manager) instalados em seu sistema.
 3. Execute o comando `npm install` na pasta raiz do projeto para instalar todas as dependências.
-4. Execute o comando `npm start` para iniciar o servidor da API.
+4. Execute o comando `npm run dev` para iniciar o servidor da API.
 5. A API estará disponível em `http://localhost:3333`.
+6. A API está configurada para receber solicitações de dominios especificos no arquivo .env.exemplo mostrar como configurar seu dominio ou no arquivo server.js substitua pelo seu domínio exemplo:
+
+```javascript
+app.use(cors({
+    origin: ["seu domínio aqui", "http://127.0.0.1:5173/"],
+    credentials: true,
+}));
+```
 
 ## Banco de Dados
 

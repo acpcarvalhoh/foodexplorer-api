@@ -16,7 +16,7 @@ database();
 
 app.use("/files", express.static(uploadsconfig.UPLOADS_FOLDER));
 app.use(cors({
-    origin: ["https://foodexplorer-delivery.vercel.app", "http://127.0.0.1:5173/"],
+    origin: [process.env.DOMAIN, "http://127.0.0.1:5173/"],
     credentials: true,
 }));
 app.use(routes);
